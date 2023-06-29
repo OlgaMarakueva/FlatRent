@@ -1,0 +1,29 @@
+{% extends 'booking/ref.html'%}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-9 p-3" align="center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="inlineRadioOptions" id="inlineRadio1" value="option1">
+                    <label class="form-check-label" for="inlineRadio1">Месяц</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="inlineRadioOptions" id="inlineRadio2" value="option2">
+                    <label class="form-check-label" for="inlineRadio2">Год</label>
+                </div>
+                <div class="row switch">
+                    <div class="btn-toolbar justify-content-center" role="toolbar">
+                        <a class="btn btn-link" role="button" href="{% url 'home' %}"><<</a>
+                        <h1>{{month}}</h1>
+                        <a class="btn btn-link" role="button" href="{% url 'home' %}">>></a>
+                    </div>
+                </div>
+                <h1>{{cal|safe}}</h1>
+            </div>
+            <div class="col" align="center">
+                <h1>col1</h1>
+            </div>
+        </div>
+    </div>
+{% endblock %}
