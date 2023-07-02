@@ -1,5 +1,6 @@
 {% extends 'booking/ref.html'%}
 
 {% block content %}
-    <h1> home <h1>
+    {% load static %}
+    <img class="img-fluid py-5" src="{% static 'booking/room.jpg' %}" alt="Image" style="{opacity: 0.5;}">
 {% endblock %}

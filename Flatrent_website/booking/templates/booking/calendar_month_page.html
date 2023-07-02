@@ -1,0 +1,20 @@
+{% extends 'booking/ref.html'%}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-8 px-5" align="center">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <a class="btn me-5 btn-sw" role="button" href="{% url 'calendar_month' %}">
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Месяц
+                    </a>
+                    <a class="btn btn-sw" role="button" href="{% url 'calendar_year' %}">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Год
+                    </a>
+                </div>
+                {% include 'booking/calendar_month.html'%}
+            </div>
+            {% include 'booking/calendar_edit.html'%}
+        </div>
+    </div>
+{% endblock %}

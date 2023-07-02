@@ -1,0 +1,102 @@
+{% extends 'booking/ref.html'%}
+
+{% block content %}
+<div class="container">
+    <div class="row py-3">
+        <h4 class="text-center text-uppercase">Добавление объекта</h4>
+    </div>
+    <div class="row g-5">
+        <div class="col-6">
+            <div class="row g-3 ms-1">
+                <label class="form-label float-start">Название</label>
+                <input type="text" class="form-control mt-0" placeholder='{{date}}'>
+            </div>
+            <div class="row g-3 ms-1 mt-1">
+                <label class="form-label">Адрес</label>
+                <input type="text" class="form-control mt-0" placeholder='{{date}}'>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row g-3 me-1">
+                <label class="form-label float-start">Комментарий</label>
+                <textarea class="form-control mt-0" id="exampleFormControlTextarea1" rows="5"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center mt-5">
+        <div class="col-6">
+            <div class="card card_inp my-4">
+                <h6 class="card-header" style="border-radius: 1em 1em 0 0;">Сайты</h6>
+                <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
+                    <div class="row">
+                        <div class="text text-start py-1">
+                            Авито
+                            <button type="button" class="btn-close float-end" aria-label="close"></button>
+                        </div>
+                        <div class="text text-start">
+                            Суточно
+                            <button type="button" class="btn-close float-end" aria-label="close"></button>
+                        </div>
+                    </div>
+                    <div class="row g-3 py-2">
+                        <div class="input-group py-2">
+                            <input type="text" class="form-control" placeholder="Название сайта" aria-describedby="button-addon2">
+                            {% load static %}
+                            <div class="d-grid gap-2 d-md-flex justify-content-end">
+                                <a class="btn image-button" href="{% url 'settings_add' %}">
+                                    <img src="{% static 'booking/plus.png' %}" alt="Image">
+                                    <span>Добавить</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card card_inp my-4">
+                <h6 class="card-header" style="border-radius: 1em 1em 0 0;">Скидки</h6>
+                <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
+                    <div class="text text-start py-1">
+                        7 дней 5%
+                        <button type="button" class="btn-close float-end" aria-label="close"></button>
+                    </div>
+                    <div class="text text-start">
+                        14 дней 10%
+                        <button type="button" class="btn-close float-end" aria-label="close"></button>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row g-3">
+                        <div class="input-group py-3">
+                            <input type="text" class="form-control" placeholder="Кол-во дней">
+                            <input type="text" class="form-control" placeholder="Скидка в %">
+                           {% load static %}
+                            <div class="d-grid gap-2 d-md-flex justify-content-end">
+                                <a class="btn image-button" href="{% url 'settings_add' %}">
+                                    <img src="{% static 'booking/plus.png' %}" alt="Image">
+                                    <span>Добавить</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="row g-3">
+        <div class="col">
+            {% load static %}
+            <div class="d-grid gap-2 d-md-flex justify-content-end">
+                <a class="btn image-button" href="{% url 'settings_add' %}">
+                    <img src="{% static 'booking/plus.png' %}" alt="Image">
+                    <span>Добавить</span>
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+

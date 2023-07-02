@@ -1,0 +1,106 @@
+{% extends 'booking/ref.html'%}
+
+{% block content %}
+    <div class="container my-3">
+        <form class="row">
+            <h4 class="text-center text-uppercase">Настройки объектов</h4>
+        </form>
+        {% load static %}-->
+<!--        <img src="{% static 'cat.png' %}" alt="Image">-->
+        <div class="d-grid gap-2 d-md-flex justify-content-end">
+            <a class="btn image-button" href="{% url 'settings_add' %}">
+            <img src="{% static 'booking/plus.png' %}" alt="Image">
+            <span>Добавить</span>
+            </a>
+        </div>
+        <div class="card my-4 card_inp">
+            <h5 class="card-header">Объект №1</h5>
+            <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label float-start">Название:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start ms-3 mb-1">Студия</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label float-start">Адрес:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start ms-3 mb-1">Ленина 57</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label float-start">Добавлен:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start ms-3 mb-1">16.04.22</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label float-start">Отредактирован:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start ms-3 mb-1">22.06.23</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label float-start">Ссылка для сайтов:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start ms-3 mb-1">url</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="label float-start">Ссылка для арендаторов:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start ms-3 mb-1">url</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="label float-start">Сайты:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start ms-3 mb-1">Авито, ЦИАН, Суточно</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="label float-start">Скидки:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start ms-3 mb-1">7 дней - 10%</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="label float-start">Комментарий:</label>
+                            </div>
+                            <div class="col">
+                                <p class="card-text ms-3 mb-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 py-2">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end py-0">
+                        <button class="btn btn-pos me-md-2" type="button">Редактировать</button>
+                        <button class="btn btn-neg" type="button">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

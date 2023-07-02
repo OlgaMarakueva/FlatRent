@@ -1,0 +1,82 @@
+{% extends 'booking/ref.html'%}
+
+{% block content %}
+    <div class="container my-3">
+        <form class="row">
+            <h4 class="text-center text-uppercase">Cписок бронирований</h4>
+        </form>
+        <div class="card card_inp my-4">
+            <h5 class="card-header" style="border-radius: 1em 1em 0 0;">Бронирование №1</h5>
+            <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="label float-start">Период:</label>
+                            </div>
+                            <div class="col-6">
+                                <p class="label float-start mb-1">16.08.23-21.08.23</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="label float-start">Имя:</label>
+                            </div>
+                            <div class="col-6">
+                                <p class="label float-start mb-1">Иван</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="label float-start">Телефон:</label>
+                            </div>
+                            <div class="col-6">
+                                <p class="label float-start mb-1">+7999999999</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="label float-start">Цена:</label>
+                            </div>
+                            <div class="col-6">
+                                <p class="label float-start mb-1">16500</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-5">
+                                <label class="label float-start">Откуда узнали:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start mb-1">Авито</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5">
+                                <label class="label float-start">Дата бронирования:</label>
+                            </div>
+                            <div class="col">
+                                <p class="label float-start mb-1">21.07.23</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5">
+                                <label class="label float-start">Комментарий:</label>
+                            </div>
+                            <div class="col">
+                                <p class="card-text mb-1">Поздний заезд после 22.00, ранний выезд в 4.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 py-2">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-pos me-md-2" type="button">Редактировать</button>
+                        <button class="btn btn-neg" type="button">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

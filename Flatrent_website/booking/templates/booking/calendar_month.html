@@ -1,29 +1,48 @@
-{% extends 'booking/ref.html'%}
-
-{% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-9 p-3" align="center">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="inlineRadioOptions" id="inlineRadio1" value="option1">
-                    <label class="form-check-label" for="inlineRadio1">Месяц</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label" for="inlineRadio2">Год</label>
-                </div>
-                <div class="row switch">
-                    <div class="btn-toolbar justify-content-center" role="toolbar">
-                        <a class="btn btn-link" role="button" href="{% url 'home' %}"><<</a>
-                        <h1>{{month}}</h1>
-                        <a class="btn btn-link" role="button" href="{% url 'home' %}">>></a>
-                    </div>
-                </div>
-                <h1>{{cal|safe}}</h1>
-            </div>
-            <div class="col" align="center">
-                <h1>col1</h1>
-            </div>
-        </div>
+<div class="row py-2">
+    <div class="btn-toolbar justify-content-center p-2" role="toolbar">
+        <a class="btn" role="button" href="{% url 'home' %}"><<</a>
+        <h4 class="text-center py-2">{{month}} {{year}}</h4>
+        <a class="btn" role="button" href="{% url 'home' %}">>></a>
     </div>
-{% endblock %}
+</div>
+<table class="table table-bordered text-center">
+    <thead>
+        <tr class="table-light">
+            <th class="col-1">ПН</th>
+            <th class="col-1">ВТ</th>
+            <th class="col-1">СР</th>
+            <th class="col-1">ЧТ</th>
+            <th class="col-1">ПТ</th>
+            <th class="col-1">СБ</th>
+            <th class="col-1">ВС</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
+            <td class="text py-5">3</td><td class="text py-5">4</td>
+            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
+        </tr>
+        <tr>
+            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
+            <td class="text py-5">3</td><td class="text py-5">4</td>
+            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
+        </tr>
+        <tr>
+            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
+            <td class="text py-5">3</td><td class="text py-5">4</td>
+            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
+        </tr>
+        <tr>
+            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
+            <td class="text py-5">3</td><td class="text py-5">4</td>
+            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
+        </tr>
+        <tr>
+            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
+            <td class="text py-5">3</td><td class="text py-5">4</td>
+            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
+        </tr>
+    </tbody>
+</table>
+
