@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config.ini")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,9 +80,17 @@ WSGI_APPLICATION = 'Flatrent_website.wsgi.application'
 
 DATABASES = {
     'default': {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": config['MySQLconn']['database'],
+        "USER": config['MySQLconn']['user'],
+        "PASSWORD": config['MySQLconn']['password'],
+        "HOST": config['MySQLconn']['host'],
+        "PORT": config['MySQLconn']['port'],
+        },
+    'lite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
 }
 
 
