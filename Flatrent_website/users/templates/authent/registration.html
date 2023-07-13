@@ -6,6 +6,7 @@
     <title>FlatRent</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     {% load static %}
+    {% load widget_tweaks %}
     <link rel="icon" type="image/png" sizes="64x64" href="{% static 'booking/house3.png' %}">
   </head>
     <style>
@@ -55,44 +56,43 @@
           <div class="card-body">
             <div class="row justify-content-center">
               <div class="col">
-                <form class="mx-md-4">
+                <p class="form-label ms-3 text-imp" >
+                  {% if form.errors %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">{{form.errors}}</div>
+                  {% endif %}
+                </p>
+                <form class="mx-md-4" action="" method="POST">
+                  {% csrf_token %}
                   <div class="row mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                    <div class="btn-group mb-5 mx-1 mt-4" role="group">
-                      <a type="button" class="btn bg-transparent btn-switch-na float-end" href="{% url 'entry' %}">Вход</a>
+                    <div class="btn-group mb-2 mx-1 mt-4" role="group">
+                      <a type="button" class="btn bg-transparent btn-switch-na float-end" href="{% url 'login' %}">Вход</a>
                       <a type="button" class="btn bg-transparent btn-switch float-end ">Регистрация</a>
                     </div>
                   </div>
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text" id="form3Example1c" class="form-control" />
-                      <label class="form-label" for="form3Example1c">Имя</label>
+                      {% render_field form.username class="form-control" type="text" name="name" %}
+                      <label class="form-label" >Имя</label>
                     </div>
                   </div>
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="password" class="form-control" />
-                      <label class="form-label" >Эл. почта</label>
-                    </div>
-                  </div>
-                  <div class="d-flex flex-row align-items-center mb-4">
-                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <input type="password" class="form-control" />
+                      {% render_field form.password1 class="form-control" type="password" name="password1" %}
                       <label class="form-label" >Пароль</label>
                     </div>
                   </div>
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="password" id="form3Example4cd" class="form-control" />
-                      <label class="form-label" for="form3Example4cd">Повторите пароль</label>
+                      {% render_field form.password2 class="form-control" type="password" name="password2" %}
+                      <label class="form-label">Повторите пароль</label>
                     </div>
                   </div>
                   <div class="d-flex justify-content-end  mb-3 mb-lg-4">
-                    <a type="button" class="btn btn-pos" href="{% url 'home' %}">Регистрация</a>
+                    <button class="btn btn-pos" type="submit">Регистрация</button>
                   </div>
                 </form>
               </div>

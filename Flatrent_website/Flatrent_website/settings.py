@@ -16,6 +16,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read("config.ini")
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'booking'
+    'booking',
+    'widget_tweaks',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -123,6 +126,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+DATE_FORMAT = "d-m-Y"
 
 
 # Static files (CSS, JavaScript, Images)

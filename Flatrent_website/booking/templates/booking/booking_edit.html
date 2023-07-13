@@ -1,0 +1,108 @@
+{% extends 'booking/ref.html'%}
+{% load widget_tweaks %}
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="container my-3">
+        <div class="row">
+            <h4 class="text-center text-uppercase">Редактирование бронирования</h4>
+        </div>
+        <div class="card card_inp my-4">
+            <h5 class="card-header" style="border-radius: 1em 1em 0 0;">Бронирование №{{booking.id_booking}}</h5>
+            <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
+                <form class="row px-2" action="" method="POST" id="f1">
+                    {% csrf_token %}
+                    <div class="row g-3 px-2 row-cols-2">
+                        <div class="col">
+                            <div class="row g-3 px-2">
+                                <div class="col">
+                                    <label class="label float-start mt-2 me-4" type="text">Заезд</label>
+                                    {% render_field form.checkin_date class="form-control" type="date" name="start_date" %}
+                                </div>
+                                <div class="col">
+                                    <label class="label float-start mt-2 me-4" type="text">Выезд</label>
+                                    {% render_field form.checkout_date class="form-control" type="date" name="end_date" %}
+                                </div>
+                            </div>
+                            <div class="row g-3 mt-2 px-2">
+                                <div class="col">
+                                    <label class="form-label float-start">Имя</label>
+                                    {% render_field form1.name class="form-control" type="textarea" name="name" %}
+                                </div>
+                                <div class="col">
+                                    <label class="form-label float-start">Телефон</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">+</span>
+                                        {% render_field form1.phone class="form-control" type="number" name="phone" %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mt-4 px-2">
+                                {% if messages %}
+                                    <h6 class="form-label ms-3" style="color: red; font-weight: bold;" >
+                                    {% for message in messages%}
+                                        {{ message }}
+                                    {% endfor %}
+                                    </h6>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row g-3 px-2">
+                                <div class="col">
+                                    <label class="form-label float-start">Источник</label>
+                                    <select class="form-select" name="source">
+                                    {% for source in source_list %}
+                                        {% if source.id_source == booking.id_source.id_source %}
+                                            <option selected>{{source.name}}</option>
+                                        {% else %}
+                                            <option>{{source.name}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label float-start">Цена, р.</label>
+                                    {% render_field form.price class="form-control" type="number" name="price" %}
+                                </div>
+                            </div>
+                             <div class="row g-3 mt-2 px-2">
+                                <div class="col">
+                                    <label class="form-label float-start">Комментарий</label>
+                                    {% render_field form.comment class="form-control" type="text" name="comment" %}
+                                </div>
+                            </div>
+                            <div class="row g-3 px-2 justify-content-md-end">
+                                <div class="col-6">
+                                    <label class="label float-start mt-4 me-4" type="text">Cтатус:</label>
+                                    <select class="form-select" name="status">
+                                        {% for status in status_list%}
+                                            {% if status.id_status == booking.id_status.id_status %}
+                                                <option selected>{{status.name}}</option>
+                                            {% else %}
+                                                <option>{{status.name}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 py-2">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-pos me-md-2" type="submit" name="save" form="f1">Сохранить</button>
+                            <button class="btn btn-neg" type="submit" name="delete" form="f1">Удалить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+
+
+
+
+
+
+

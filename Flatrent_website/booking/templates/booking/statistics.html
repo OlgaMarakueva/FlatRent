@@ -1,69 +1,70 @@
 {% extends 'booking/ref.html'%}
-
 {% block content %}
-    <div class="btn-toolbar justify-content-center p-2" role="toolbar">
-        <a class="btn" role="button" href="{% url 'home' %}"><<</a>
-        <h4 class="text-center py-2">{{year}}</h4>
-        <a class="btn" role="button" href="{% url 'home' %}">>></a>
-    </div>
-    <div class="container my-5">
-        <div class="row row-cols-lg-3">
-            <div class="col">
-                <div class="card">
-                    <h5 class="card-title text-center">Доход, р</h5>
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+{% if user.is_authenticated %}
+        <div class="btn-toolbar justify-content-center p-2" role="toolbar">
+            <a class="btn" role="button" href="{% url 'home' %}"><<</a>
+            <h4 class="text-center py-2">{{year}}</h4>
+            <a class="btn" role="button" href="{% url 'home' %}">>></a>
+        </div>
+        <div class="container my-5">
+            <div class="row row-cols-lg-3">
+                <div class="col">
+                    <div class="card">
+                        <h5 class="card-title text-center">Доход, р</h5>
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col">
+                    <div class="card"">
+                        <h5 class="card-title text-center">Средняя стоимость суток, р</h5>
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col">
+                    <div class="card"">
+                     <h5 class="card-title text-center">Загрузка, %</h5>
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-             <div class="col">
-                <div class="card"">
-                    <h5 class="card-title text-center">Средняя стоимость суток, р</h5>
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class="row my-5">
+                <div class="col">
+                    <div class="card"">
+                        <h5 class="card-title text-center">Кол-во бронирований, шт</h5>
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-             <div class="col">
-                <div class="card"">
-                 <h5 class="card-title text-center">Загрузка, %</h5>
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                 <div class="col">
+                    <div class="card"">
+                        <h5 class="card-title text-center">Средний срок аренды, день</h5>
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col">
+                    <div class="card"">
+                        <h5 class="card-title text-center">Ресурс</h5>
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-                <div class="row my-5">
-            <div class="col">
-                <div class="card"">
-                    <h5 class="card-title text-center">Кол-во бронирований, шт</h5>
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
-            </div>
-             <div class="col">
-                <div class="card"">
-                    <h5 class="card-title text-center">Средний срок аренды, день</h5>
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
-            </div>
-             <div class="col">
-                <div class="card"">
-                    <h5 class="card-title text-center">Ресурс</h5>
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% endif %}
 {% endblock %}

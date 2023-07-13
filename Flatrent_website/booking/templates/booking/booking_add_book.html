@@ -1,0 +1,121 @@
+{% load widget_tweaks %}
+<div class="col card_inp" align="center" >
+    <div class="row py-3 px-2">
+        <h4 class="text-center text-uppercase">Бронирование</h4>
+    </div>
+    {% if messages %}
+        <p class="form-label ms-3" style="color: red; font-weight: bold;" >
+            {% for message in messages%}
+                {{ message }}
+            {% endfor %}
+        </p>
+    {% else %}
+        <p class="form-label ms-3" style="font-weight: bold;" >Введите данные</p>
+    {% endif %}
+    <form class="row g-3 py-3 px-2" action="" method="POST" id="f1">
+        {% csrf_token %}
+        <div class="col">
+            <label class="form-label float-start">Начало периода</label>
+            {% render_field form1.checkin_date|attr:"readonly" class="form-control" type="date" name="start_date" %}
+        </div>
+        <div class="col">
+            <label class="form-label float-start">Конец периода</label>
+            {% render_field form1.checkout_date|attr:"readonly" class="form-control" type="date" name="end_date"%}
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-neg float-end" form="f1" name="searchdates">Новый поиск</button>
+        </div>
+        <div class="d-flex flex-row mt-3">
+            <div class="col">
+                <label class="label float-start px-3 me-4 mt-1">Базовая цена, р:</label>
+            </div>
+            <div class="col">
+                <input class="form-control-plaintext" type="number" value="{{total_price}}" name="tot_price" readonly>
+            </div>
+        </div>
+        {% if calc_type == 'price' %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="calctype" value="price" checked>
+                <div class="col">
+                    <label class="label float-start me-4">Итоговая цена, р</label>
+                </div>
+                <div class="col">
+                    {% render_field form1.price class="form-control" type="number" name="price"%}
+                </div>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="calctype" value="discount">
+                <div class="col">
+                    <label class="label float-start me-4">Скидка, %</label>
+                </div>
+                <div class="col">
+                    <input class="form-control" type="number" value="{{discount}}" name="discount">
+                </div>
+            </div>
+        {% else %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="calctype" value="price">
+                <div class="col">
+                    <label class="label float-start me-4">Итоговая цена, р</label>
+                </div>
+                <div class="col">
+                    {% render_field form1.price class="form-control" type="number" name="price"%}
+                </div>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="calctype" value="discount" checked>
+                <div class="col">
+                    <label class="label float-start me-4">Скидка, %</label>
+                </div>
+                <div class="col">
+                    <input class="form-control" type="number" value="{{discount}}" name="discount">
+                </div>
+            </div>
+        {% endif %}
+        <div class="col-12">
+            <button type="submit" class="btn btn-secondary float-end mb-2" form="f1" name="updateprice">Пересчитать цену</button>
+        </div>
+
+    <h6 class="text-center text-uppercase">Данные арендатора</h6>
+        <div class="row g-3 px-2 mt-0">
+            <div class="col">
+                <label class="form-label float-start">Имя</label>
+                {% render_field form2.name class="form-control" type="text" name="name" %}
+            </div>
+            <div class="col">
+                <label class="form-label float-start">Телефон</label>
+                <div class="input-group">
+                    <span class="input-group-text">+</span>
+                    {% render_field form2.phone class="form-control" type="number" name="phone" placeholder="79801112244"%}
+                </div>
+            </div>
+        </div>
+        <div class="row py-3 px-2">
+            <div class="col">
+                <label class="form-label float-start">Комментарий</label>
+                {% render_field form1.comment class="form-control" type="textarea" name="comment" %}
+            </div>
+        </div>
+        <div class="row px-2 py-0">
+            <div class="col-6">
+                <label class="form-label float-start">Источник</label>
+            </div>
+        </div>
+        <div class="row g-3 px-2 mt-0 py-0">
+            <div class="col">
+                <select class="form-select" name="source">
+                    {% for source in source_list%}
+                        {% if source.id_source == form1.id_source.value %}
+                            <option selected>{{source.name}}</option>
+                        {% else %}
+                            <option>{{source.name}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-pos float-end" form="f1" name="makebooking">Забронировать</button>
+            </div>
+        </div>
+    </form >
+</div>

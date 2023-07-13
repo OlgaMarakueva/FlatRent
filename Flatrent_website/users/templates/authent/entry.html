@@ -19,6 +19,12 @@
       color: #528B8B;
       }
 
+      .text-imp {
+      color: #8B2252;
+      font-weight: bold;
+      font-size: 18px;
+      }
+
       .btn-switch {
       color: #528B8B;
       border: none;
@@ -55,10 +61,11 @@
           <div class="card-body">
             <div class="row justify-content-center">
               <div class="col">
-                <form class="mx-md-4">
+                <form class="mx-md-4" action="" method=POST>
+                  {% csrf_token%}
                   <div class="row mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                    <div class="btn-group mb-5 mx-1 mt-4" role="group">
+                    <div class="btn-group mb-2 mx-1 mt-4" role="group">
                       <a type="button" class="btn bg-transparent btn-switch float-end">Вход</a>
                       <a type="button" class="btn bg-transparent btn-switch-na float-end" href="{% url 'registration' %}" role="button">Регистрация</a>
                     </div>
@@ -66,19 +73,26 @@
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="password" class="form-control" />
-                      <label class="form-label" >Эл. почта</label>
+                      <input type="text" class="form-control" name="username" />
+                      <label class="form-label" >Имя пользователя</label>
                     </div>
                   </div>
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="password" class="form-control" />
+                      <input type="password" class="form-control" name="password" />
                       <label class="form-label" >Пароль</label>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-end  mb-3 mb-lg-4">
-                    <a type="button" class="btn btn-pos" href="{% url 'home' %}">Войти</a>
+                  <p class="form-label ms-3 text-imp" >
+                    {% if messages %}
+                      {% for message in messages%}
+                        {{ message }}
+                      {% endfor %}
+                    {% endif %}
+                    </p>
+                  <div class="d-flex justify-content-end mb-3 mb-lg-4">
+                    <input type="submit" class="btn btn-pos" value="Войти">
                   </div>
                 </form>
               </div>

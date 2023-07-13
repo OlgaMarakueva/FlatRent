@@ -6,17 +6,18 @@
             <div class="row">
                 <div class="col-8 px-5" align="center">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <a class="btn me-5 btn-sw" role="button" href="{% url 'calendar_month' %}">
+                        <a class="btn me-5" style="background-color:transparent" role="button" href="{% url 'booking_month_check' %}">
                             <input type="radio" name="options" id="option1" autocomplete="off" checked> Месяц
                         </a>
-                        <a class="btn btn-sw" role="button" href="{% url 'calendar_year' %}">
+                        <a class="btn" style="background-color:transparent" role="button" href="{% url 'booking_year_check' %}">
                             <input type="radio" name="options" id="option2" autocomplete="off"> Год
                         </a>
                     </div>
                     {% include 'booking/calendar_month.html'%}
                 </div>
-                {% include 'booking/calendar_edit.html'%}
+                {% include 'booking/booking_check_dates.html'%}
             </div>
         </div>
     {% endif %}
 {% endblock %}
+
