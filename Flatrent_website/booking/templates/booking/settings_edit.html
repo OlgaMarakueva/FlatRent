@@ -12,6 +12,7 @@
                 <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
                     <form class="row px-2" action="" method="POST" id="f0">
                         {% csrf_token %}
+                        <input type="hidden" name="flat" value={{selected_flat.id_flat}}>
                         <div class="row g-3 ms-1 mt-1">
                             <div class="col-6">
                                 <div class="row g-3 ms-1 mt-1">
@@ -68,7 +69,7 @@
                                 <div class="row g-3 ms-1 mt-1">
                                     <div class="card card_inp my-4 px-0">
                                         <h7 class="card-header" style="border-radius: 1em 1em 0 0;">Источники</h7>
-                                        <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;>
+                                        <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
                                             <form class="form-control" action="" method="POST" id="f2">
                                                 {% csrf_token %}
                                                 <div class="row">
@@ -90,7 +91,7 @@
                         <div class="row g-3 py-2">
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <button class="btn btn-pos me-md-2" type="submit" name="save" form="f0">Сохранить</button>
-                                <a class="btn btn-neg" type="submit" name="cancel" href="{% url 'settings' %}">Отменить</a>
+                                <a class="btn btn-neg" type="submit" name="cancel" href="{% url 'settings' %}?flat={{selected_flat.id_flat}}">Отменить</a>
                             </div>
                             {% if messages %}
                             <h6 class="form-label ms-3" style="color: red; font-weight: bold;" >

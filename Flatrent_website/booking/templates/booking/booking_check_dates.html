@@ -19,6 +19,7 @@
     {% endif %}
     <form class="row g-3 mt-1 px-2" action="" method="POST" id="f1">
         {% csrf_token %}
+        <input type="hidden" name="flat" value={{selected_flat.id_flat}}>
         <div class="col">
             <label class="form-label float-start">Начало периода</label>
             {% render_field form.start_date class="form-control" type="date" name="start_date"%}

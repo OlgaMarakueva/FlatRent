@@ -14,6 +14,7 @@
     {% endif %}
     <form class="row g-3 py-3 px-2" action="" method="POST" id="f1">
         {% csrf_token %}
+        <input type="hidden" name="flat" value={{selected_flat.id_flat}}>
         <div class="col">
             <label class="form-label float-start">Начало периода</label>
             {% render_field form1.checkin_date|attr:"readonly" class="form-control" type="date" name="start_date" %}
@@ -105,10 +106,10 @@
             <div class="col">
                 <select class="form-select" name="source">
                     {% for source in source_list%}
-                        {% if source.id_source == form1.id_source.value %}
-                            <option selected>{{source.name}}</option>
+                        {% if source.id_source.id_source == form1.id_source.value %}
+                            <option selected>{{source.id_source.name}}</option>
                         {% else %}
-                            <option>{{source.name}}</option>
+                            <option>{{source.id_source.name}}</option>
                         {% endif %}
                     {% endfor %}
                 </select>

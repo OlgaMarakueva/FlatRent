@@ -97,10 +97,6 @@ class Landlord(models.Model):
     edit_date = models.DateField(auto_now=True)
     id_landlord = models.OneToOneField(User, models.CASCADE, primary_key=True)
 
-    # id_landlord = models.AutoField(primary_key=True)
-    # edit_date = models.DateField(auto_now=True)
-    # id_user = models.ForeignKey(User, models.CASCADE, db_column='id_user')
-
     class Meta:
         managed = True
         db_table = 'landlord'
@@ -123,6 +119,7 @@ class Tenant(models.Model):
     class Meta:
         managed = True
         db_table = 'tenant'
+
 
 class BookingTenant(models.Model):
     id_booking_tenant = models.SmallAutoField(primary_key=True)

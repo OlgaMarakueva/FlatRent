@@ -98,8 +98,8 @@
                     </div>
                     <div class="row g-3 py-2">
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a class="btn btn-pos me-md-2" type="button" href="{% url 'booking_edit' book.id_booking%}">Редактировать</a>
-                            <a class="btn btn-neg" type="button" href="{% url 'booking_delete' book.id_booking%}">Удалить</a>
+                            <a class="btn btn-pos me-md-2" type="button" href="{% url 'booking_edit' book.id_booking%}?flat={{selected_flat.id_flat}}">Редактировать</a>
+                            <a class="btn btn-neg" type="button" href="{% url 'booking_delete' book.id_booking%}?flat={{selected_flat.id_flat}}">Удалить</a>
                         </div>
                     </div>
                 </div>

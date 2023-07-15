@@ -12,29 +12,39 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <select class="form-select" name="dropdown">
-                    <option selected>Объект 1</option>
-                    <option value="1">Объект 2</option>
-                    <option value="2">Объект 3</option>
-                    <option value="3">Объект 4</option>
-                </select>
+                <li class="nav-item dropdown bg-light" style="border-radius: 0.5em;">
+                    {% if flat_list %}
+                        <a class="nav-link dropdown-toggle link-dark" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">{{selected_flat.name}}</a>
+                        <ul class="dropdown-menu">
+                        {% for flat in flat_list %}
+                            {% if flat.id_flat != selected_flat.id_flat %}
+                                    <li><a class="dropdown-item" href="{{request.path}}?flat={{flat.id_flat}}">{{flat.name}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                    <a class="nav-link bg-dark" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">Объект</a>
+                    {% endif %}
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'calendar_month' %}">Календарь</a>
+                    <a class="nav-link" aria-current="page" href="{% url 'calendar_month' %}?flat={{selected_flat.id_flat}}">Календарь</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        aria-expanded="false">Бронирование
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="{% url 'booking_month_check' %}">Добавить</a></li>
-                        <li><a class="dropdown-item" href="{% url 'booking_list' %}">Список</a></li>
+                        <li><a class="dropdown-item" href="{% url 'booking_month_check' %}?flat={{selected_flat.id_flat}}">Добавить</a></li>
+                        <li><a class="dropdown-item" href="{% url 'booking_list' %}?flat={{selected_flat.id_flat}}">Список</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'statistics' %}">Статистика</a>
+                    <a class="nav-link" aria-current="page" href="{% url 'statistics' %}?flat={{selected_flat.id_flat}}">Статистика</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'settings'%}">Настройки</a>
+                    <a class="nav-link" aria-current="page" href="{% url 'settings'%}?flat={{selected_flat.id_flat}}">Настройки объектов</a>
                 </li>
             </ul>
             {% if user.is_authenticated %}
@@ -44,7 +54,7 @@
                            aria-expanded="false"> Профиль
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="{% url 'profile_edit' %}">Редактировать</a></li>
+                            <li><a class="dropdown-item" href="{% url 'profile_edit' %}?flat={{selected_flat.id_flat}}">Редактировать</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
                         </ul>
                     </ul>

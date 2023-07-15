@@ -14,15 +14,16 @@ def user_in_base(tel):
         return None
 
 
-def period_is_available(d1, d2, exc=None, edit=0):
+def period_is_available(d1, d2, flat, exc=None, edit=0):
+    booking_list_flat = Booking.objects.filter(id_flat=flat)
     if exc is not None:
-        booking_list = Booking.objects.filter(checkin_date__lte=d1, checkout_date__gt=d1,).exclude(id_booking=exc).exclude(id_status=3)
-        booking_list2 = Booking.objects.filter(checkin_date__gt=d1, checkin_date__lt=d2).exclude(id_booking=exc).exclude(id_status=3)
+        booking_list = booking_list_flat.filter(checkin_date__lte=d1, checkout_date__gt=d1,).exclude(id_booking=exc).exclude(id_status=3)
+        booking_list2 = booking_list_flat.filter(checkin_date__gt=d1, checkin_date__lt=d2).exclude(id_booking=exc).exclude(id_status=3)
     else:
-        booking_list = Booking.objects.filter(checkin_date__lte=d1, checkout_date__gt=d1).exclude(id_status=3)
-        booking_list2 = Booking.objects.filter(checkin_date__gt=d1, checkin_date__lt=d2).exclude(id_status=3)
+        booking_list = booking_list_flat.filter(checkin_date__lte=d1, checkout_date__gt=d1).exclude(id_status=3)
+        booking_list2 = booking_list_flat.filter(checkin_date__gt=d1, checkin_date__lt=d2).exclude(id_status=3)
     if edit == 0:
-        days_list = Calendar.objects.filter(is_available=0, date__gte=d1, date__lt=d2)
+        days_list = Calendar.objects.filter(is_available=0, date__gte=d1, date__lt=d2, id_flat=flat)
     else:
         days_list = []
     if days_list or booking_list or booking_list2:
@@ -30,9 +31,8 @@ def period_is_available(d1, d2, exc=None, edit=0):
     return True
 
 
-
-def calculate_price(d1, d2):
-    days_list = Calendar.objects.filter(date__gte=d1, date__lt=d2)
+def calculate_price(d1, d2, flat):
+    days_list = Calendar.objects.filter(date__gte=d1, date__lt=d2, id_flat=flat)
     price_list = days_list.values('base_price')
     tot_price = 0
     for obj in list(price_list):
@@ -44,38 +44,48 @@ def convert_date(d1):
     return datetime.strptime(d1, '%Y-%m-%d').date()
 
 
-def check_avail_price_discount(day1, day2):
+def check_avail_price_discount(day1, day2, flat):
     day1 = convert_date(day1)
     day2 = convert_date(day2)
 
-    def check_discount(d1, d2):
+    def check_discount(d1, d2, flat):
         nights = (d2 - d1).days
-        disc_obj = Discount.objects.filter(nights_amount__lte=nights)
+        disc_flat = FlatDiscount.objects.filter(id_flat=flat)
+        disc_obj = disc_flat.filter(id_discount__nights_amount__lte=nights)
         if disc_obj:
             disc_obj = disc_obj.order_by('-discount').values('discount')[0]
             return disc_obj['discount']
         else:
             return 0
 
-    dates_avail = period_is_available(day1, day2)
+    dates_avail = period_is_available(day1, day2, flat)
     if dates_avail:
-        return dates_avail, calculate_price(day1, day2), check_discount(day1, day2)
+        return dates_avail, calculate_price(day1, day2, flat), check_discount(day1, day2, flat)
     else:
         return dates_avail, None, None
 
 
 # views
 def home(request):
-    return render(request, 'booking/home.html', {})
+
+    landlord = Landlord.objects.get(id_landlord=request.user.id)
+    flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
+    selected_flat = flat_list[0]
+    return render(request, 'booking/home.html', {"flat_list": flat_list, "selected_flat": selected_flat})
 
 
 def calendar_month(request):
+    if request.method == "GET":
+        selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
+    landlord = Landlord.objects.get(id_landlord=request.user.id)
+    flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
     form = CheckDataForm(request.POST or None)
     if request.POST:
+        selected_flat = Flat.objects.get(id_flat=request.POST['flat'])
         day1 = request.POST["start_date"]
         day2 = request.POST["end_date"]
-        if period_is_available(day1, day2, edit=1):
-            days_list = Calendar.objects.filter(date__gte=day1, date__lt=day2)
+        if period_is_available(day1, day2, selected_flat, edit=1):
+            days_list = Calendar.objects.filter(date__gte=day1, date__lt=day2, id_flat=selected_flat.id_flat)
             if "closedates" in request.POST:
                 for day in days_list:
                     day.is_available = 0
@@ -87,11 +97,13 @@ def calendar_month(request):
                     day.save()
                     form = CheckDataForm({"start_date": day1, "end_date": day2})
             elif "setparams" in request.POST:
-                base_price = request.POST["base_price"]
-                min_nights_amount = request.POST["min_nights_amount"]
+                base_price = request.POST["price"]
+                min_nights_amount = request.POST["nights_amount"]
                 for day in days_list:
-                    day.base_price = base_price
-                    day.min_nights_amount = min_nights_amount
+                    if base_price:
+                        day.base_price = base_price
+                    if min_nights_amount:
+                        day.min_nights_amount = min_nights_amount
                     day.save()
                 form = CheckDataForm({"start_date": day1, "end_date": day2,
                                       "price": base_price, "nights_amount": min_nights_amount})
@@ -104,8 +116,9 @@ def calendar_month(request):
     year = date.year
     month_name = date.strftime("%B")
     date = date.date().strftime("%d.%m")
-    return render(request, 'booking/calendar_month_page.html', {"year": year, "month": month_name,
-                                                                "date": date, "form": form})
+    return render(request, 'booking/calendar_month_page.html', {"year": year, "month": month_name, "date": date,
+                                                                "form": form, "flat_list": flat_list,
+                                                                "selected_flat": selected_flat})
 
 
 def calendar_year(request):
@@ -123,26 +136,29 @@ def booking_year_check(request, date=datetime.now()):
 
 
 def booking_delete(request, booking_id):
+    selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
     landlord = Landlord.objects.get(id_landlord=request.user.id)
     flat_list = Flat.objects.filter(id_landlord=landlord.id_landlord_id)
     booking = Booking.objects.get(pk=booking_id)
     if booking.id_flat in flat_list:
         booking = Booking.objects.get(pk=booking_id)
         booking.delete()
-        return redirect('booking_list')
+        return HttpResponseRedirect(f'/booking/list?flat={selected_flat.id_flat}')
     else:
         raise Http404('У Вас нет доступа')
 
 
 def booking_edit(request, booking_id):
+    if request.method == "GET":
+        selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
     landlord = Landlord.objects.get(id_landlord=request.user.id)
-    flat_list = Flat.objects.filter(id_landlord=landlord.id_landlord_id)
+    flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
     booking = Booking.objects.get(pk=booking_id)
     if booking.id_flat in flat_list:
         tenant = Tenant.objects.get(booking=booking_id)
         form = BookingForm(request.POST or None, instance=booking)
         form1 = TenantForm(request.POST or None, instance=tenant)
-        source_list = Source.objects.order_by('name').all()
+        # source_list = Source.objects.order_by('name').all()
 
         status = booking.id_status.name
         if status == 'Отменен' or status == 'Ожидается':
@@ -153,6 +169,7 @@ def booking_edit(request, booking_id):
             status_list = Status.objects.order_by('name').filter(name__in=['В процессе','Отменен'])
 
         if request.method == "POST":
+            selected_flat = Flat.objects.get(id_flat=request.POST['flat'])
             if "save" in request.POST:
                 start_date = request.POST['checkin_date']
                 end_date = request.POST['checkout_date']
@@ -184,7 +201,7 @@ def booking_edit(request, booking_id):
                             else:
                                 usr_from_base.name = name.strip().title()
                                 usr_from_base.save()
-                            return redirect('booking_list')
+                            return HttpResponseRedirect(f'/booking/list?flat={selected_flat.id_flat}')
                         else:
                             data_form2 = {'phone': phone, 'name': name.strip().title()}
                             form2 = TenantForm(data_form2)
@@ -194,31 +211,40 @@ def booking_edit(request, booking_id):
                     if status.name == "Отменен":
                         return check_details()
                     elif status.name == "Ожидается" or status.name == "Завершен":
-                        if convert_date(end_date) > convert_date(start_date):
-                            if period_is_available(start_date, end_date, exc=booking_id):
+                        min_nights = Calendar.objects.filter(date=start_date, id_flat=selected_flat.id_flat).values('min_nights_amount')
+                        if (convert_date(end_date) - convert_date(start_date)).days >= min_nights[0]['min_nights_amount']:
+                            if period_is_available(start_date, end_date, selected_flat, exc=booking_id):
                                 if convert_date(end_date) <= datetime.now().date():
                                     return check_details(new_status=Status.objects.get(name='Завершен'))
                                 elif convert_date(start_date) <= datetime.now().date() < convert_date(end_date):
-                                    print('eeee')
                                     return check_details(new_status=Status.objects.get(name='В процессе'))
                                 else:
-                                    print('nnnnn')
                                     return check_details(new_status=Status.objects.get(name='Ожидается'))
                             else:
                                 messages.success(request, "В указанные даты есть/было другое бронирование")
+                        else:
+                            messages.success(request, "Недостаточный период проживания")
                 else:
                     messages.success(request, "Даты введены неверно")
             if "delete" in request.POST:
                 booking.delete()
-                return redirect('booking_list')
+                return HttpResponseRedirect(f'/booking/list?flat={selected_flat.id_flat}')
+
+        source_list = FlatSource.objects.filter(id_flat=selected_flat.id_flat).order_by('id_source__name')
 
         return render(request, 'booking/booking_edit.html', {'booking': booking, 'form': form, 'form1': form1,
-                                                             "status_list": status_list, "source_list": source_list, })
+                                                             "status_list": status_list, "source_list": source_list,
+                                                             "flat_list": flat_list, "selected_flat": selected_flat })
     else:
         raise Http404('У Вас нет доступа')
 
 
 def booking_month_check(request):
+    if request.method == "GET":
+        selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
+    landlord = Landlord.objects.get(id_landlord=request.user.id)
+    flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
+
     date = datetime.now()
     year = date.year
     month_name = date.strftime("%B")
@@ -226,40 +252,55 @@ def booking_month_check(request):
     form = CheckDataForm(request.POST or None)
     source_list = Source.objects.order_by('name').all()
     if request.method == "POST":
+        selected_flat = Flat.objects.get(id_flat=request.POST['flat'])
         start_date = request.POST['start_date']
         end_date = request.POST['end_date']
         if "searchdates" in request.POST:
             form = CheckDataForm(request.POST)
             if convert_date(end_date) > convert_date(start_date) >= date.date():
-                check_data = check_avail_price_discount(start_date, end_date)
-                is_period_avail = check_data[0]
-                if is_period_avail:
-                    tot_price = check_data[1]
-                    discount = check_data[2]
-                    price = int(tot_price * (100 - discount) / 100)
-                    result = 'success'
-                    return render(request, 'booking/booking_month_check.html',
-                                  {"year": year, "month": month_name, "form": form, "result": result,
-                                   "price": price, "discount": discount, "source_list": source_list,
-                                   "tot_price": tot_price})
+                min_nights = Calendar.objects.filter(date=start_date, id_flat=selected_flat.id_flat).values('min_nights_amount')
+                if (convert_date(end_date) - convert_date(start_date)).days >= min_nights[0]['min_nights_amount']:
+                    check_data = check_avail_price_discount(start_date, end_date, selected_flat)
+                    is_period_avail = check_data[0]
+                    if is_period_avail:
+                        tot_price = check_data[1]
+                        discount = check_data[2]
+                        price = int(tot_price * (100 - discount) / 100)
+                        result = 'success'
+                        return render(request, 'booking/booking_month_check.html',
+                                      {"year": year, "month": month_name, "form": form, "result": result,
+                                       "price": price, "discount": discount, "source_list": source_list,
+                                       "tot_price": tot_price, "selected_flat": selected_flat, "flat_list": flat_list})
+                    else:
+                        result = 'nonavailable'
+                        messages.success(request, "Даты недоступны")
                 else:
-                    result = 'nonavailable'
-                    messages.success(request, "Даты недоступны")
+                    result = 'nonсorrect'
+                    messages.success(request, "Недостаточный период проживания")
             else:
                 result = 'nonсorrect'
                 messages.success(request, "Даты введены неверно")
+
+            print("SEL", selected_flat)
+
         elif "makebooking" in request.POST:
             price = request.POST['price']
             discount = request.POST['discount']
             tot_price = request.POST['tot_price']
             return HttpResponseRedirect(f'add?start_date={start_date}&tot_price={tot_price}&'
-                                        f'end_date={end_date}&price={price}&discount={discount}')
+                                        f'end_date={end_date}&price={price}&discount={discount}'
+                                        f'&flat={selected_flat.id_flat}')
+
     return render(request, 'booking/booking_month_check.html',
                   {"year": year, "month": month_name, "form": form, "result": result,
-                   "source_list": source_list})
+                   "source_list": source_list, "flat_list": flat_list, "selected_flat": selected_flat})
 
 
 def booking_month_add(request):
+
+    landlord = Landlord.objects.get(id_landlord=request.user.id)
+    flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
+
     calc_type = 'price'
     date = datetime.now()
     year = date.year
@@ -267,15 +308,16 @@ def booking_month_add(request):
     form = CheckDataForm(request.POST or None)
     form1 = BookingForm(request.POST or None)
     form2 = TenantForm(request.POST or None)
-    source_list = Source.objects.order_by('name').all()
+
     if request.method == "GET":
+        selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
         start_date = request.GET["start_date"]
         end_date = request.GET["end_date"]
         price = request.GET["price"]
         tot_price = request.GET["tot_price"]
         discount = request.GET["discount"]
 
-        data_form1 = {'id_flat': 1,
+        data_form1 = {'id_flat': selected_flat.id_flat,
                       'id_source': None,
                       'id_status': None,
                       'checkin_date': start_date,
@@ -287,6 +329,7 @@ def booking_month_add(request):
         data_form = {'discount': discount}
         form = CheckDataForm(data_form)
     if request.method == "POST":
+        selected_flat = Flat.objects.get(id_flat=request.POST['flat'])
         name = request.POST['name']
         phone = request.POST['phone']
         start_date = request.POST['checkin_date']
@@ -314,7 +357,7 @@ def booking_month_add(request):
                         discount = int(100 * (float(tot_price) - float(price)) / float(tot_price))
         elif "searchdates" in request.POST:
             return redirect('booking_month_check')
-        data_form1 = {'id_flat': 1,
+        data_form1 = {'id_flat': selected_flat.id_flat,
                       'id_source': Source.objects.get(name=source),
                       'id_status': 2,
                       'checkin_date': start_date,
@@ -338,7 +381,7 @@ def booking_month_add(request):
                     booking_obj = form1.save()
                     booking_tenant_obj = BookingTenant(id_booking=booking_obj, phone=tenant_obj)
                     booking_tenant_obj.save()
-                    return redirect('booking_list')
+                    return HttpResponseRedirect(f'/booking/list?flat={selected_flat.id_flat}')
                 else:
                     messages.success(request, "Проверьте данные!")
             else:
@@ -352,44 +395,62 @@ def booking_month_add(request):
             data_form2 = {'phone': phone, 'name': name}
             form2 = TenantForm(data_form2)
             messages.success(request, "Неправильно указан телефон!")
+
+    source_list = FlatSource.objects.filter(id_flat=selected_flat.id_flat).order_by('id_source__name')
+
     return render(request, 'booking/booking_month_add.html',
                   {"year": year, "month": month_name, "form": form, "form1": form1, "discount": discount,
-                   "form2": form2, "source_list": source_list, 'total_price': tot_price, 'calc_type': calc_type})
+                   "form2": form2, "source_list": source_list, 'total_price': tot_price, 'calc_type': calc_type,
+                   "flat_list": flat_list, "selected_flat": selected_flat})
 
 
 def booking_list(request):
+
+    selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
     landlord = Landlord.objects.get(id_landlord=request.user.id)
-    flat_list = Flat.objects.filter(id_landlord=landlord.id_landlord_id)
-    book_list = Booking.objects.order_by('-id_booking').filter(id_flat__in=flat_list)
+    flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
+    book_list = Booking.objects.order_by('-id_booking').filter(id_flat=selected_flat)
+
     disc_dict = {}
     for book in book_list:
         start_day = book.checkin_date
         end_day = book.checkout_date
         price = int(book.price)
-        tot_price = calculate_price(start_day, end_day)
-        discount = 100*(tot_price - price)/tot_price
-        disc_dict[book.id_booking] = int(discount)
-    return render(request, 'booking/booking_list.html', {'book_list': book_list, 'disc_dict': disc_dict}, )
+        tot_price = calculate_price(start_day, end_day, selected_flat)
+        if tot_price != 0:
+            discount = 100*(tot_price - price)/tot_price
+            disc_dict[book.id_booking] = int(discount)
+        else:
+            disc_dict[book.id_booking] = 0
+    return render(request, 'booking/booking_list.html', {'book_list': book_list, 'disc_dict': disc_dict,
+                                                         'flat_list': flat_list, 'selected_flat': selected_flat}, )
 
 
 def statistics(request, date=datetime.now()):
-    year = date.year
-    return render(request, 'booking/statistics.html', {"year": year})
-
-
-def settings(request):
-    print("GET", request.GET)
+    selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
     landlord = Landlord.objects.get(id_landlord=request.user.id)
     flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
-    return render(request, 'booking/settings.html', {'flat_list': flat_list})
+
+    year = date.year
+    return render(request, 'booking/statistics.html', {"year": year, "flat_list": flat_list,
+                                                       "selected_flat": selected_flat})
+
+def settings(request):
+    selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
+    landlord = Landlord.objects.get(id_landlord=request.user.id)
+    flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
+    return render(request, 'booking/settings.html', {'flat_list_tot': flat_list, "selected_flat": selected_flat})
 
 def settings_check_add(request, extra_number, instance, query1, query2, add=0):
+    if request.method == "GET":
+        selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
     form = FlatForm(request.POST or None, instance=instance)
     DiscountFormSet = modelformset_factory(Discount, exclude=('flat', 'id_discount'), extra=extra_number)
     SourceFormSet = modelformset_factory(Source, exclude=('flat',), extra=extra_number)
     form1 = DiscountFormSet(queryset=query1)
     form2 = SourceFormSet(queryset=query2)
     if request.method == "POST":
+        selected_flat = Flat.objects.get(id_flat=request.POST['flat'])
         data1 = {'form-TOTAL_FORMS': extra_number,
                  'form-INITIAL_FORMS': extra_number}
         data2 = {'form-TOTAL_FORMS': extra_number,
@@ -400,7 +461,6 @@ def settings_check_add(request, extra_number, instance, query1, query2, add=0):
         for k, v in request.POST.items():
             if '-name' in k and v:
                 data2[k] = v
-        print('DATA1', data1)
         form1 = DiscountFormSet(data1)
         form2 = SourceFormSet(data2, initial=data2)
         if "save" in request.POST:
@@ -479,12 +539,13 @@ def settings_check_add(request, extra_number, instance, query1, query2, add=0):
                                     source_obj.save()
                                 flat_source_obj = FlatSource(id_flat=flat_obj, id_source=source_obj)
                                 flat_source_obj.save()
-                    return redirect("settings")
+                    return HttpResponseRedirect(f'/settings?flat={selected_flat.id_flat}')
     if add == 0:
-        return render(request, 'booking/settings_edit.html', {'form': form, 'form1': form1, 'form2': form2})
+        return render(request, 'booking/settings_edit.html', {'form': form, 'form1': form1,
+                                                              'form2': form2, "selected_flat": selected_flat})
     else:
-        return render(request, 'booking/settings_add.html', {'form': form, 'form1': form1, 'form2': form2})
-
+        return render(request, 'booking/settings_add.html', {'form': form, 'form1': form1,
+                                                             'form2': form2, "selected_flat": selected_flat})
 
 def settings_add(request):
     extra_number = 5
@@ -494,7 +555,7 @@ def settings_add(request):
 def settings_edit(request, flat_id):
     landlord = Landlord.objects.get(id_landlord=request.user.id)
     flat = Flat.objects.get(pk=flat_id)
-    if flat.id_landlord == landlord.id_landlord_id:
+    if flat.id_landlord.id_landlord_id == landlord.id_landlord_id:
         extra_number = 5
         return settings_check_add(request, extra_number=extra_number, instance=flat,
                                        query1=Discount.objects.filter(flat=flat), query2=Source.objects.filter(flat=flat))
@@ -502,15 +563,19 @@ def settings_edit(request, flat_id):
         raise Http404('У Вас нет доступа')
 
 def settings_delete(request, flat_id):
+    selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
     landlord = Landlord.objects.get(id_landlord=request.user.id)
     flat = Flat.objects.get(pk=flat_id)
-    if flat.id_landlord == landlord.id_landlord_id:
+    if flat.id_landlord.id_landlord_id == landlord.id_landlord_id:
         flat = Flat.objects.get(pk=flat_id)
         flat.delete()
-        return redirect('settings')
+        return HttpResponseRedirect(f'/settings?flat={selected_flat.id_flat}')
     else:
         raise Http404('У Вас нет доступа')
 
-
 def profile_edit(request):
-    return render(request, 'booking/profile_edit.html', {})
+    if request.method == "GET":
+        selected_flat = Flat.objects.get(id_flat=request.GET['flat'])
+    landlord = Landlord.objects.get(id_landlord=request.user.id)
+
+    return render(request, 'booking/profile_edit.html', {"selected_flat": selected_flat.id_flat})

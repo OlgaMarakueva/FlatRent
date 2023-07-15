@@ -9,7 +9,7 @@
                         <a class="btn me-5" style="background-color:transparent" role="button" href="{% url 'booking_month_check' %}">
                             <input type="radio" name="options" id="option1" autocomplete="off" checked> Месяц
                         </a>
-                        <a class="btn" style="background-color:transparent" role="button" href="{% url 'booking_year_check' %}">
+                        <a class="btn" style="background-color:transparent" role="button" href="{% url 'booking_year_check' %}?flat={{selected_flat.id_flat}}">
                             <input type="radio" name="options" id="option2" autocomplete="off"> Год
                         </a>
                     </div>

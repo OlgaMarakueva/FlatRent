@@ -7,12 +7,12 @@
             <h4 class="text-center text-uppercase">Настройки объектов</h4>
         </form>
         <div class="d-grid gap-2 d-md-flex justify-content-end">
-            <a class="btn image-button" href="{% url 'settings_add' %}">
+            <a class="btn image-button" href="{% url 'settings_add' %}?flat={{selected_flat.id_flat}}">
             <img src="{% static 'booking/plus.png' %}" alt="Image">
             <span>Добавить</span>
             </a>
         </div>
-        {% for flat in flat_list %}
+        {% for flat in flat_list_tot %}
             <div class="card my-4 card_inp">
                 <h5 class="card-header">{{flat.name}}</h5>
                 <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
@@ -96,8 +96,8 @@
                     </div>
                     <div class="row g-3 py-2">
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end py-0">
-                            <a class="btn btn-pos me-md-2" type="button" href="{% url 'settings_edit' flat.id_flat%}">Редактировать</a>
-                            <a class="btn btn-neg" type="button" href="{% url 'settings_delete' flat.id_flat%}">Удалить</a>
+                            <a class="btn btn-pos me-md-2" type="button" href="{% url 'settings_edit' flat.id_flat%}?flat={{selected_flat.id_flat}}">Редактировать</a>
+                            <a class="btn btn-neg" type="button" href="{% url 'settings_delete' flat.id_flat%}?flat={{selected_flat.id_flat}}">Удалить</a>
                         </div>
                     </div>
                 </div>
