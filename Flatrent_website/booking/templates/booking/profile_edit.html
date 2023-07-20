@@ -1,27 +1,39 @@
 {% extends 'booking/ref.html'%}
-
+{% load widget_tweaks %}
 {% block content %}
     {% if user.is_authenticated %}
         <div class="col" align="center" >
             <form class="row py-3">
                 <h4 class="text-center text-uppercase">Редактирование профиля</h4>
             </form>
-            <form class="row g-5 py-3 justify-content-center">
+            {% if messages %}
+                <h6 class="form-label ms-3" style="color: red; font-weight: bold;" >
+                    {% for message in messages%}
+                    <br>
+                        {{ message }}
+                    {% endfor %}
+                </h6>
+            {% endif %}
+            {% if form.errors %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">{{form.errors}}</div>
+            {% endif %}
+            <form class="row g-5 py-3 justify-content-center" action="" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="flat" value={{selected_flat.id_flat}}>
                 <div class="col-3">
                     <label class="form-label float-start">Имя</label>
-                    <input type="text" class="form-control">
+                    {% render_field form.username class="form-control" type="text" name="name" %}
                 </div>
                 <div class="col-3">
-                    <label class="form-label float-start">Электронная почта</label>
-                    <input type="text" class="form-control">
-                </div>
-            </form>
-            <form class="row g-5 justify-content-center">
-                <div class="col-3">
-                </div>
-                <div class="col-3">
-                    <label class="form-label float-start">Пароль</label>
-                    <input type="text" class="form-control">
+                    <div class="row">
+                        <label class="form-label float-start">Пароль</label>
+                        {% render_field form.password1 class="form-control" type="password" name="password1" %}
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label class="form-label float-start">Подтверждение пароля</label>
+                        {% render_field form.password2 class="form-control" type="password" name="password2" %}
+                    </div>
                     <button type="submit" class="btn btn-pos mt-3 float-end">Сохранить</button>
                 </div>
             </form>

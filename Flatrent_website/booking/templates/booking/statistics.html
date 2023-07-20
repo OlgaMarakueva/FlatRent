@@ -1,66 +1,73 @@
 {% extends 'booking/ref.html'%}
 {% block content %}
 {% if user.is_authenticated %}
+
         <div class="btn-toolbar justify-content-center p-2" role="toolbar">
-            <a class="btn" role="button" href="{% url 'home' %}"><<</a>
+            <button type="submit" class="btn btn-sw" name="prevyear" form="f1"><<</button>
             <h4 class="text-center py-2">{{year}}</h4>
-            <a class="btn" role="button" href="{% url 'home' %}">>></a>
+            <button type="submit" class="btn btn-sw" name="nextyear" form="f1">>></button>
         </div>
-        <div class="container my-5">
-            <div class="row row-cols-lg-3">
+        <form class="row g-3 py-3 px-2" action="" method="POST" id="f1">
+            {% csrf_token %}
+            <input type="hidden" name="year" value={{year}}>
+        </form>
+        <div class="container my-1">
+            <div class="row row-cols-lg-2">
                 <div class="col">
-                    <div class="card">
-                        <h5 class="card-title text-center">Доход, р</h5>
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class="card" style="border: None;">
+                        <div class="card-body py-0">
+                            <div style="width:1000; height:100; py: 0">
+                                {{ graph_div_income|safe }}
+                            </div>
                         </div>
                     </div>
                 </div>
                  <div class="col">
-                    <div class="card"">
-                        <h5 class="card-title text-center">Средняя стоимость суток, р</h5>
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                </div>
-                 <div class="col">
-                    <div class="card"">
-                     <h5 class="card-title text-center">Загрузка, %</h5>
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class="card" style="border: None;">
+                        <div class="card-body py-0">
+                            <div style="width:1000;height:100">
+                                {{ graph_div_avprice|safe }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-                    <div class="row my-5">
+            <div class="row row-cols-lg-2">
+                 <div class="col">
+                    <div class="card" style="border: None;">
+                        <div class="card-body py-0">
+                            <div style="width:1000;height:100">
+                                {{ graph_div_load|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col">
-                    <div class="card"">
-                        <h5 class="card-title text-center">Кол-во бронирований, шт</h5>
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class="card" style="border: None;">
+                        <div class="card-body py-0">
+                            <div style="width:1000;height:100">
+                                {{ graph_div_booknumber|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-lg-2">
+                 <div class="col">
+                    <div class="card" style="border: None;">
+                        <div class="card-body py-0">
+                            <div style="width:1000;height:100">
+                                {{ graph_div_avperiod|safe }}
+                            </div>
                         </div>
                     </div>
                 </div>
                  <div class="col">
-                    <div class="card"">
-                        <h5 class="card-title text-center">Средний срок аренды, день</h5>
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                </div>
-                 <div class="col">
-                    <div class="card"">
-                        <h5 class="card-title text-center">Ресурс</h5>
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <div class="card" style="border: None;">
+                        <div class="card-body py-0">
+                            <div style="width:1000;height:100">
+                                {{ graph_div_source|safe }}
+                            </div>
                         </div>
                     </div>
                 </div>

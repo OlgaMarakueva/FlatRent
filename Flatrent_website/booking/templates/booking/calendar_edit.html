@@ -6,14 +6,16 @@
         </form>
         <form class="row g-3 py-3 px-2" id="f1" action="" method="POST">
             {% csrf_token %}
+            <input type="hidden" name="cal_year" value={{year}}>
+            <input type="hidden" name="cal_month" value={{month}}>
             <input type="hidden" name="flat" value={{selected_flat.id_flat}}>
             <div class="col">
                 <label class="form-label float-start">Начало периода</label>
-                {% render_field form.start_date class="form-control" type="date" name="start_date" %}
+                {% render_field form.start_date class="form-control" type="date" name="start_date" value=date %}
             </div>
             <div class="col">
                 <label class="form-label float-start">Конец периода</label>
-                {% render_field form.end_date class="form-control" type="date" name="end_date" %}
+                {% render_field form.end_date class="form-control" type="date" name="end_date" value=date %}
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-neg float-end" form="f1" name="closedates">Закрыть даты</button>
@@ -27,7 +29,7 @@
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        {% render_field form.price class="form-control" type="number" name="base_price"%}
+                        {% render_field form.price class="form-control" type="number" name="base_price" %}
                         <span class="input-group-text">Р</span>
                     </div>
                 </div>

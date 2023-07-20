@@ -16,13 +16,13 @@
                         <div class="row g-3 ms-1 mt-1">
                             <div class="col-6">
                                 <div class="row g-3 ms-1 mt-1">
-                                    <label class="label float-start mt-2 me-4" type="text">Название</label>
+                                    <label class="label float-start mt-2 me-4" type="text">*Название</label>
                                     {% render_field form.name class="form-control" type="text" name="name" %}
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="row g-3 ms-1 mt-1">
-                                    <label class="label float-start mt-2 me-4" type="text">Адрес</label>
+                                    <label class="label float-start mt-2 me-4" type="text">*Адрес</label>
                                     {% render_field form.address class="form-control" type="text" name="address" %}
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                                     <div class="card card_inp my-4 px-0">
                                         <h7 class="card-header" style="border-radius: 1em 1em 0 0;">Скидки</h7>
                                         <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
-                                            <form class="form-control" action="" method="POST" id="f1">
+                                            <form class="form-control" action="" method="POST">
                                                 {% csrf_token %}
                                                 <div class="row">
                                                     <div class="col">
@@ -68,8 +68,8 @@
                             <div class="col-6">
                                 <div class="row g-3 ms-1 mt-1">
                                     <div class="card card_inp my-4 px-0">
-                                        <h7 class="card-header" style="border-radius: 1em 1em 0 0;">Источники</h7>
-                                        <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
+                                       <h7 class="card-header" style="border-radius: 1em 1em 0 0;">Источники</h7>
+                                        <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;>
                                             <form class="form-control" action="" method="POST" id="f2">
                                                 {% csrf_token %}
                                                 <div class="row">

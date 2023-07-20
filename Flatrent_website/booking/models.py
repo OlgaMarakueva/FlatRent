@@ -26,7 +26,8 @@ class Booking(models.Model):
         db_table = 'booking'
 
 class Calendar(models.Model):
-    date = models.DateField(primary_key=True)
+    id_date = models.AutoField(primary_key=True)
+    date = models.DateField()
     id_flat = models.ForeignKey('Flat', models.CASCADE, db_column='id_flat')
     base_price = models.SmallIntegerField()
     min_nights_amount = models.IntegerField()
@@ -35,6 +36,7 @@ class Calendar(models.Model):
     class Meta:
         managed = True
         db_table = 'calendar'
+        unique_together = (('date', 'id_flat'),)
 
 class Source(models.Model):
     id_source = models.AutoField(primary_key=True)

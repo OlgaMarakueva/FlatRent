@@ -1,14 +1,14 @@
 <div class="row py-2">
     <div class="btn-toolbar justify-content-center p-2" role="toolbar">
-        <a class="btn" role="button" href="{% url 'home' %}"><<</a>
-        <h4 class="text-center py-2">{{month}} {{year}}</h4>
-        <a class="btn" role="button" href="{% url 'home' %}">>></a>
+        <button type="submit" class="btn btn-sw" name="prevmonth" form="f1"><<</button>
+        <h4 class="text-center mb-0">{{month_name}} {{year}}</h4>
+        <button type="submit" class="btn btn-sw" name="nextmonth" form="f1">>></button>
     </div>
 </div>
 <table class="table table-bordered text-center">
     <thead>
         <tr class="table-light">
-            <th class="col-1">ПН</th>
+            <th class="col-1" style="font-color: #528B8B">ПН</th>
             <th class="col-1">ВТ</th>
             <th class="col-1">СР</th>
             <th class="col-1">ЧТ</th>
@@ -18,31 +18,27 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
-            <td class="text py-5">3</td><td class="text py-5">4</td>
-            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
-        </tr>
-        <tr>
-            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
-            <td class="text py-5">3</td><td class="text py-5">4</td>
-            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
-        </tr>
-        <tr>
-            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
-            <td class="text py-5">3</td><td class="text py-5">4</td>
-            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
-        </tr>
-        <tr>
-            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
-            <td class="text py-5">3</td><td class="text py-5">4</td>
-            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
-        </tr>
-        <tr>
-            <td class="text py-5">1</td class="text py-5"><td class="text py-5">2</td>
-            <td class="text py-5">3</td><td class="text py-5">4</td>
-            <td class="text py-5">5</td><td class="text py-5">6</td><td class="text py-5">7</td>
-        </tr>
+        {% for week in calendar%}
+            <tr>
+                {% for day, status in week.items %}
+                <td class="text py-0 px-0">
+                    {% if status == 2 or day.is_available == 0 %}
+                        <div class="card-fluid" style="background-color: #CFCFCF;">
+                    {% elif status == 0 %}
+                        <div class="card-fluid" style="background-color: #e38aa6a6;">
+                    {% elif status == 1 %}
+                        <div class="card-fluid" style="background-color: #c6f5e8;">
+                    {% endif %}
+                        <div class="card-body-fluid">
+                            <p style="font-size: 28px;">{{day.date|date:'d'}}</p>
+                            <h7>{{day.base_price}} р.</h7></br>
+                            <h7>{{day.min_nights_amount}} ночи</h7>
+                        </div>
+                    </div>
+                </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
 

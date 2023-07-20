@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Flat, Booking, Tenant, Discount, Source, Landlord
+from .models import Flat, Booking, Tenant, Discount, Source, Landlord, Calendar
 
 
 class FlatForm(ModelForm):
@@ -8,7 +8,6 @@ class FlatForm(ModelForm):
         model = Flat
         fields = "__all__"
         exclude = ['source', 'discount']
-
 
 class DiscountForm(ModelForm):
     class Meta:
@@ -45,4 +44,7 @@ class LandlordForm(ModelForm):
         model = Landlord
         fields = "__all__"
 
-
+class CalendarForm(ModelForm):
+    class Meta:
+        model = Calendar
+        fields = "__all__"

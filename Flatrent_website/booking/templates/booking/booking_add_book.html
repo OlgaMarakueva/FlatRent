@@ -17,7 +17,7 @@
         <input type="hidden" name="flat" value={{selected_flat.id_flat}}>
         <div class="col">
             <label class="form-label float-start">Начало периода</label>
-            {% render_field form1.checkin_date|attr:"readonly" class="form-control" type="date" name="start_date" %}
+            {% render_field form1.checkin_date|attr:"readonly" class="form-control" type="date" name="start_date"%}
         </div>
         <div class="col">
             <label class="form-label float-start">Конец периода</label>
@@ -80,11 +80,11 @@
     <h6 class="text-center text-uppercase">Данные арендатора</h6>
         <div class="row g-3 px-2 mt-0">
             <div class="col">
-                <label class="form-label float-start">Имя</label>
+                <label class="form-label float-start">*Имя</label>
                 {% render_field form2.name class="form-control" type="text" name="name" %}
             </div>
             <div class="col">
-                <label class="form-label float-start">Телефон</label>
+                <label class="form-label float-start">*Телефон</label>
                 <div class="input-group">
                     <span class="input-group-text">+</span>
                     {% render_field form2.phone class="form-control" type="number" name="phone" placeholder="79801112244"%}

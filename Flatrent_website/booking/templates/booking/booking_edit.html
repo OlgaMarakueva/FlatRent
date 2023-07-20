@@ -16,21 +16,21 @@
                         <div class="col">
                             <div class="row g-3 px-2">
                                 <div class="col">
-                                    <label class="label float-start mt-2 me-4" type="text">Заезд</label>
+                                    <label class="label float-start mt-2 me-4" type="text">*Заезд</label>
                                     {% render_field form.checkin_date class="form-control" type="date" name="start_date" %}
                                 </div>
                                 <div class="col">
-                                    <label class="label float-start mt-2 me-4" type="text">Выезд</label>
+                                    <label class="label float-start mt-2 me-4" type="text">*Выезд</label>
                                     {% render_field form.checkout_date class="form-control" type="date" name="end_date" %}
                                 </div>
                             </div>
                             <div class="row g-3 mt-2 px-2">
                                 <div class="col">
-                                    <label class="form-label float-start">Имя</label>
+                                    <label class="form-label float-start">*Имя</label>
                                     {% render_field form1.name class="form-control" type="textarea" name="name" %}
                                 </div>
                                 <div class="col">
-                                    <label class="form-label float-start">Телефон</label>
+                                    <label class="form-label float-start">*Телефон</label>
                                     <div class="input-group">
                                         <span class="input-group-text">+</span>
                                         {% render_field form1.phone class="form-control" type="number" name="phone" %}
@@ -50,7 +50,7 @@
                         <div class="col">
                             <div class="row g-3 px-2">
                                 <div class="col">
-                                    <label class="form-label float-start">Источник</label>
+                                    <label class="form-label float-start">*Источник</label>
                                     <select class="form-select" name="source">
                                     {% for source in source_list %}
                                         {% if source.id_source.id_source == booking.id_source.id_source %}
@@ -62,7 +62,7 @@
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <label class="form-label float-start">Цена, р.</label>
+                                    <label class="form-label float-start">*Цена, р.</label>
                                     {% render_field form.price class="form-control" type="number" name="price" %}
                                 </div>
                             </div>

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
-# from ..booking.forms import LandlordForm
+from django.apps import apps
 
 def login_user(request):
     if request.method == "POST":
@@ -30,9 +30,8 @@ def registration(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
-            # landlord = LandlordForm({'id_user'})
-            # if landlord.is_valid():
-            #      landlord.save()
+            landlord = apps.get_model('booking', 'Landlord')
+            l = landlord.objects.create(id_landlord_id=user.id)
             login(request, user)
             return redirect('home')
     else:
