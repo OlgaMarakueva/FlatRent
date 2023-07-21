@@ -303,11 +303,20 @@ def calendar_month(request):
                     messages.success(request, "В указанный период есть бронирование")
 
         calend = show_calendar(month, year, selected_flat.id_flat)
-        locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+
+        month_dict = { 1: "Январь", 2: "Февраль", 3: "Март", 4: "Апрель", 5: "Май", 6: "Июнь",
+                       7: "Июль", 8: "Август", 9: "Сентябрь", 10: "Октябрь", 11: "Ноябрь", 12: "Декабрь"}
+
         return render(request, 'booking/calendar_month_edit.html', {"year": year, "month": month,
-                                                                    "month_name": list(calendar.month_name)[month],
+                                                                    "month_name": month_dict[month],
                                                                     "date": date, "form": form, "flat_list": flat_list,
                                                                     "selected_flat": selected_flat, "calendar": calend})
+
+        # locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+        # return render(request, 'booking/calendar_month_edit.html', {"year": year, "month": month,
+        #                                                             "month_name": list(calendar.month_name)[month],
+        #                                                             "date": date, "form": form, "flat_list": flat_list,
+        #                                                             "selected_flat": selected_flat, "calendar": calend})
     else:
         raise Http404('У Вас нет доступа')
 
