@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">Flat Rent</a>
+        <a class="navbar-brand">Flat Rent</a>
         <button class="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
@@ -41,7 +41,7 @@
                            aria-expanded="false">Бронирование
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="{% url 'booking_month_check' %}?flat={{selected_flat.id_flat}}">Добавить</a></li>
+                            <li><a class="dropdown-item" href="{% url 'booking_check' %}?flat={{selected_flat.id_flat}}">Добавить</a></li>
                             <li><a class="dropdown-item" href="{% url 'booking_list' %}?flat={{selected_flat.id_flat}}">Список</a></li>
                         </ul>
                     </li>

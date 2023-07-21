@@ -1,97 +1,9 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FlatRent</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    {% load static %}
-    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'booking/house3.png' %}">
-    <style>
+{% extends 'booking/ref.html'%}
+{% load widget_tweaks %}
 
-      .card_inp {
-      border-radius: 1em;
-      background-color:	#F5F5F5
-      }
-
-      .text-imp {
-      color: #8B2252;
-      font-weight: bold;
-      font-size: 18px;
-      }
-
-      .text-prof {
-      color: grey;
-      }
-
-      .text-prof:hover {
-      color: lightgrey;
-      }
-
-      .btn-neg{
-      background-color: #8B2252;
-      color: white;
-      }
-
-      .btn-m{
-      background-color: #EE7942;
-      color: white;
-      }
-
-      .btn-pos{
-      background-color: #528B8B;
-      color: white;
-      }
-
-      .btn-pos:hover{
-      border-color: #528B8B;
-      color: #528B8B;
-      }
-
-      .btn-neg:hover{
-      border-color: #8B2252;
-      color: #8B2252;
-      }
-
-      .btn-sw{
-      border: none;
-      }
-
-      .image-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #528B8B;
-      color: white;
-      border: none;
-      cursor: pointer;
-      }
-
-      .image-button img {
-      height: 20px;
-      margin-right: 10px;
-      }
-
-      .image-filter {
-	  width: 100%;
-	  height: 10%;
-	  position: absolute;
-	  top: 100px;
-	  background: white;
-	  opacity: 0;
-
-	  .lbl-inv{
-	  color: #fff;
-	  display: none;
-	  }
-}
-    </style>
-  </head>
-  <body>
-    <br/>
-    {% load widget_tweaks %}
-    <div class="container-fluid">
-       <div class="container">
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="container">
             <div class="row">
                 <div class="col-8 px-5" align="center">
                     {% include 'booking/calendar_month.html'%}
@@ -142,14 +54,14 @@
                             <label class="label float-start mt-2 me-4" type="text">Скидка, %:</label>
                             <input class="form-control-plaintext " type="text" value="{{discount}}" name="discount" readonly>
                          </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-pos float-end" form="f1" name="makebooking">Забронировать</button>
+                            </div>
                         {% endif %}
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-  </body>
-</html>
-
+    {% endif %}
+{% endblock %}
 
