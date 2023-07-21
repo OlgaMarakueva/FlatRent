@@ -232,14 +232,17 @@ def home(request):
     """
         Home page view, sets selected_flat
     """
-    landlord = Landlord.objects.get(id_landlord=request.user.id)
-    flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
-    # if the flat list is not empty the first flat is chosen
-    if list(flat_list):
-        selected_flat = flat_list[0]
+    if request.user.is_authenticated:
+        landlord = Landlord.objects.get(id_landlord=request.user.id)
+        flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
+        # if the flat list is not empty the first flat is chosen
+        if list(flat_list):
+            selected_flat = flat_list[0]
+        else:
+            selected_flat = None
+        return render(request, 'booking/home.html', {"flat_list": flat_list, "selected_flat": selected_flat})
     else:
-        selected_flat = None
-    return render(request, 'booking/home.html', {"flat_list": flat_list, "selected_flat": selected_flat})
+        return redirect('login')
 
 
 def calendar_month(request):
