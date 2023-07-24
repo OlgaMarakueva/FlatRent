@@ -9,16 +9,6 @@ class FlatForm(ModelForm):
         fields = "__all__"
         exclude = ['source', 'discount']
 
-class DiscountForm(ModelForm):
-    class Meta:
-        model = Discount
-        fields = "__all__"
-
-class SourceForm(ModelForm):
-    class Meta:
-        model = Source
-        fields = "__all__"
-
 class BookingForm(ModelForm):
     class Meta:
         model = Booking
@@ -38,11 +28,6 @@ class CheckDataForm(forms.Form):
     price = forms.CharField(required=False)
     discount = forms.CharField(required=False)
     nights_amount = forms.CharField(required=False)
-
-class LandlordForm(ModelForm):
-    class Meta:
-        model = Landlord
-        fields = "__all__"
 
 class CalendarForm(ModelForm):
     class Meta:

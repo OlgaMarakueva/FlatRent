@@ -10,7 +10,7 @@
             <div class="d-flex flex-row mb-3 justify-content-end">
                 <div class="col-auto">
                     <select class="form-select" name="sorttype">
-                      <option value="0">По номеру бронирования</option>
+                      <option value="0">По дате бронирования</option>
                       <option value="1">По дате заезда</option>
                       <option value="2">По статусу</option>
                     </select>
@@ -22,7 +22,7 @@
         </form>
         {% for book in book_list %}
             <div class="card card_inp my-4">
-                <h5 class="card-header" style="border-radius: 1em 1em 0 0;">Бронирование №{{book.id_booking}}</h5>
+                <h5 class="card-header" style="border-radius: 1em 1em 0 0;">Бронирование {{book.id_booking}}</h5>
                 <div class="card-body bg-white" style="border-radius: 0 0 1em 1em;">
                     <div class="row">
                         <div class="col-6">

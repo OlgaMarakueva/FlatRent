@@ -392,13 +392,22 @@ def booking_check(request):
                                                 f'&flat={selected_flat.id_flat}')
 
         calend = show_calendar(month, year, selected_flat.id_flat)
-        # shows months in Russian
-        locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+        month_dict = {1: "Январь", 2: "Февраль", 3: "Март", 4: "Апрель", 5: "Май", 6: "Июнь",
+                      7: "Июль", 8: "Август", 9: "Сентябрь", 10: "Октябрь", 11: "Ноябрь", 12: "Декабрь"}
+
         return render(request, 'booking/booking_check.html', {"year": year, "month": month,
-                                                              "month_name": list(calendar.month_name)[month],
+                                                              "month_name": month_dict[month],
                                                               "date": date, "form": form, "result": result,
                                                               "source_list": source_list, "flat_list": flat_list,
-                                                              "selected_flat": selected_flat, "calendar": calend,})
+                                                              "selected_flat": selected_flat, "calendar": calend, })
+
+        # shows months in Russian
+        # locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+        # return render(request, 'booking/booking_check.html', {"year": year, "month": month,
+        #                                                       "month_name": list(calendar.month_name)[month],
+        #                                                       "date": date, "form": form, "result": result,
+        #                                                       "source_list": source_list, "flat_list": flat_list,
+        #                                                       "selected_flat": selected_flat, "calendar": calend,})
     else:
         raise Http404('У Вас нет доступа')
 
@@ -520,14 +529,24 @@ def booking_add(request):
 
         source_list = FlatSource.objects.filter(id_flat=selected_flat.id_flat).order_by('id_source__name')
         calend = show_calendar(month, year, selected_flat.id_flat)
-        locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+        month_dict = {1: "Январь", 2: "Февраль", 3: "Март", 4: "Апрель", 5: "Май", 6: "Июнь",
+                      7: "Июль", 8: "Август", 9: "Сентябрь", 10: "Октябрь", 11: "Ноябрь", 12: "Декабрь"}
+
         return render(request, 'booking/booking_add.html', {"year": year, "month": month, "form": form,
-                                                            "month_name": list(calendar.month_name)[month],
+                                                            "month_name": month_dict[month],
                                                             "form1": form1, "discount": discount,
                                                             "form2": form2, "source_list": source_list,
                                                             "total_price": tot_price, "calc_type": calc_type,
                                                             "flat_list": flat_list, "selected_flat": selected_flat,
                                                             "calendar": calend})
+        # locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+        # return render(request, 'booking/booking_add.html', {"year": year, "month": month, "form": form,
+        #                                                     "month_name": list(calendar.month_name)[month],
+        #                                                     "form1": form1, "discount": discount,
+        #                                                     "form2": form2, "source_list": source_list,
+        #                                                     "total_price": tot_price, "calc_type": calc_type,
+        #                                                     "flat_list": flat_list, "selected_flat": selected_flat,
+        #                                                     "calendar": calend})
     else:
         raise Http404('У Вас нет доступа')
 
@@ -547,7 +566,7 @@ def booking_list(request):
     landlord = Landlord.objects.get(id_landlord=request.user.id)
     flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
     if sort_type == 0:
-        book_list = Booking.objects.order_by('-id_booking').filter(id_flat=selected_flat)
+        book_list = Booking.objects.order_by('-booking_date').filter(id_flat=selected_flat)
     elif sort_type == 1:
         book_list = Booking.objects.order_by('-checkin_date').filter(id_flat=selected_flat)
     elif sort_type == 2:
@@ -651,7 +670,7 @@ def booking_edit(request, booking_id):
         source_list = FlatSource.objects.filter(id_flat=selected_flat.id_flat).order_by('id_source__name')
         return render(request, 'booking/booking_edit.html', {'booking': booking, 'form': form, 'form1': form1,
                                                              "status_list": status_list, "source_list": source_list,
-                                                             "flat_list": flat_list, "selected_flat": selected_flat})
+                                                             "flat_list": [], "selected_flat": selected_flat})
     else:
         raise Http404('У Вас нет доступа')
 
@@ -687,7 +706,6 @@ def statistics(request):
     landlord = Landlord.objects.get(id_landlord=request.user.id)
     flat_list = Flat.objects.order_by('name').filter(id_landlord=landlord.id_landlord_id)
     date = datetime.datetime.now().date()
-    print("HOST", request.get_host())
     if selected_flat in flat_list:
         if request.method == "GET":
             year = date.year
